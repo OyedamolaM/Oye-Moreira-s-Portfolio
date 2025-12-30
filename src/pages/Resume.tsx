@@ -155,10 +155,6 @@ export default function Resume() {
               <p className="font-medium text-gray-700 mb-1">Appclick</p>
               <p className="text-gray-600">Full-stack development, modern web technologies, and best practices</p>
             </div>
-            <div className="p-6 border rounded-lg bg-gray-50">
-              <h3 className="font-semibold text-lg mb-1">Software Engineering Certificate</h3>
-              <p className="text-gray-600">ALX Africa, 2024</p>
-            </div>
           </div>
         </section>
 
