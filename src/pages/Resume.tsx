@@ -1,184 +1,269 @@
-import { ArrowLeft, Download, Briefcase, GraduationCap, Award } from "lucide-react";
+import {
+  ArrowLeft,
+  Download,
+  Briefcase,
+  GraduationCap,
+  Award,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 export default function Resume() {
   const resumeRef = useRef<HTMLDivElement>(null);
 
-  const handleDownload = async () => {
-    if (!resumeRef.current) return;
+  /* ====== PDF Styles ====== */
+  const pdfStyles = StyleSheet.create({
+    page: { padding: 20, fontSize: 12, fontFamily: "Helvetica", backgroundColor: "#f3f4f6" },
+    container: { backgroundColor: "#fff", padding: 20, borderRadius: 5 },
+    header: { textAlign: "center", marginBottom: 15 },
+    name: { fontSize: 24, fontWeight: "bold", marginBottom: 5 },
+    title: { fontSize: 14, marginBottom: 2 },
+    contact: { fontSize: 10, color: "#6b7280", marginBottom: 10 },
+    section: { marginBottom: 12 },
+    sectionHeader: { fontSize: 16, fontWeight: "bold", marginBottom: 5 },
+    skillBox: { borderWidth: 1, borderColor: "#d1d5db", padding: 5, marginBottom: 5, borderRadius: 3 },
+    skillRow: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
+    experienceBox: { borderWidth: 1, borderColor: "#d1d5db", padding: 5, marginBottom: 5, borderRadius: 3 },
+    eduBox: { borderWidth: 1, borderColor: "#d1d5db", padding: 5, marginBottom: 5, borderRadius: 3 },
+    listItem: { marginLeft: 10, marginBottom: 2 },
+  });
 
-    const canvas = await html2canvas(resumeRef.current, { scale: 2, useCORS: true });
-    const imgData = canvas.toDataURL("image/png");
+  /* ====== PDF Component ====== */
+  const ResumePDF = () => (
+    <Document>
+      <Page style={pdfStyles.page}>
+        <View style={pdfStyles.container}>
+          {/* Header */}
+          <View style={pdfStyles.header}>
+            <Text style={pdfStyles.name}>Oyedamola Moreira</Text>
+            <Text style={pdfStyles.title}>Full Stack Software Engineer</Text>
+            <Text style={pdfStyles.contact}>Lagos, Nigeria • aoyedamola@gmail.com</Text>
+          </View>
 
-    const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+          {/* Summary */}
+          <View style={pdfStyles.section}>
+            <Text style={pdfStyles.sectionHeader}>Summary</Text>
+            <Text>
+              Results-driven Full Stack Software Engineer with proven experience
+              building scalable, high-impact web applications across e-commerce,
+              EdTech, and AI-powered platforms.
+            </Text>
+            <Text>
+              Strong expertise in React, TypeScript, Node.js, and modern backend
+              systems, delivering measurable business outcomes through performance
+              optimization, clean architecture, and user-focused engineering.
+            </Text>
+          </View>
 
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("Oyedamola_Moreira_Resume.pdf");
-  };
+          {/* Skills */}
+          <View style={pdfStyles.section}>
+            <Text style={pdfStyles.sectionHeader}>Technical Skills</Text>
+            <View style={pdfStyles.skillRow}>
+              {[
+                { title: "Frontend", content: "React, TypeScript, Next.js, Redux, Context API, Web Accessibility, Performance Optimization, Tailwind CSS, SCSS" },
+                { title: "Backend", content: "Node.js, Express.js, PostgreSQL, MongoDB, Supabase, RESTful APIs" },
+                { title: "AI & Automation", content: "OpenAI API, Gemini, GPT Engineer, AI-driven workflow automation" },
+                { title: "Tools & Workflow", content: "Git, GitHub, Docker, Postman, Slack, ClickUp Vercel, Figma, Agile / Scrum" },
+              ].map((skill, i) => (
+                <View key={i} style={{ ...pdfStyles.skillBox, width: "48%" }}>
+                  <Text style={{ fontWeight: "bold", marginBottom: 2 }}>{skill.title}</Text>
+                  <Text>{skill.content}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Experience */}
+          <View style={pdfStyles.section}>
+            <Text style={pdfStyles.sectionHeader}>Professional Experience</Text>
+            {[
+              { title: "Bumpa – Software Engineer", date: "Oct 2024 – Present", items: ["Contributed to ₦1B+ in monthly sales by delivering high-performance React and TypeScript features.", "Built and maintained SEO-optimized marketing pages improving conversion rates.", "Improved merchant workflows by over 40% using automation and reusable templates.", "Developed dashboards and real-time analytics for internal and partner teams."] },
+              { title: "Top Français Academy – Full Stack Developer", date: "Jun 2025 – Present", items: ["Built a full-stack e-learning platform for French language education.", "Implemented course management, student progress tracking, and interactive features.", "Ensured responsive design and scalable backend architecture."] },
+              { title: "Codelabs AI – Backend Developer", date: "2025", items: ["Developed AI-powered backend services integrating OpenAI and Gemini.", "Designed scalable APIs and automation pipelines.", "Improved performance, logging, and system reliability."] },
+              { title: "Savans Pharmacy – Full Stack Developer", date: "2025 – Ongoing", items: ["Developed a pharmacy e-commerce platform using React, Node.js, PostgreSQL, and Supabase.", "Implemented cart management, checkout workflows, and payment integrations.", "Focused on scalability, clean architecture, and user experience."] },
+            ].map((exp, i) => (
+              <View key={i} style={pdfStyles.experienceBox}>
+                <Text style={{ fontWeight: "bold" }}>{exp.title} ({exp.date})</Text>
+                {exp.items.map((item, idx) => (
+                  <Text key={idx} style={pdfStyles.listItem}>• {item}</Text>
+                ))}
+              </View>
+            ))}
+          </View>
+
+          {/* Education */}
+          <View style={pdfStyles.section}>
+            <Text style={pdfStyles.sectionHeader}>Education</Text>
+            {[
+              { title: "Bachelor of Pharmacy (B.Pharm)", institution: "Obafemi Awolowo University, Nigeria", note: "Graduated 2018" },
+              { title: "Web Development Training", institution: "Appclick", note: "Full-stack web development and modern engineering practices" },
+            ].map((edu, i) => (
+              <View key={i} style={pdfStyles.eduBox}>
+                <Text style={{ fontWeight: "bold" }}>{edu.title}</Text>
+                <Text>{edu.institution}</Text>
+                <Text>{edu.note}</Text>
+              </View>
+            ))}
+          </View>
+
+          {/* Languages & Hobbies */}
+          <View style={pdfStyles.section}>
+            <Text style={pdfStyles.sectionHeader}>Languages & Hobbies</Text>
+            <View style={pdfStyles.skillRow}>
+              <View style={{ ...pdfStyles.skillBox, width: "48%" }}>
+                <Text style={{ fontWeight: "bold" }}>Languages</Text>
+                <Text>English (Native), Yoruba (Fluent), Igbo, French (Basic)</Text>
+              </View>
+              <View style={{ ...pdfStyles.skillBox, width: "48%" }}>
+                <Text style={{ fontWeight: "bold" }}>Hobbies</Text>
+                <Text>Coding, Reading, Singing, Dancing, Exploring new technologies</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans" ref={resumeRef}>
-      <div className="max-w-5xl mx-auto px-6 py-12">
-        {/* Back + Download */}
-        <div className="flex items-center justify-between mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors">
-            <ArrowLeft size={20} />
-            Back to Home
+    <div className="min-h-screen bg-gray-100 py-6 md:py-12">
+      {/* ====== HTML Resume Render ====== */}
+      <div
+        ref={resumeRef}
+        className="bg-white mx-auto max-w-[794px] p-8 md:p-12 text-gray-900 font-sans"
+      >
+        {/* Controls */}
+        <div className="flex justify-between items-center mb-8">
+          <Link to="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900">
+            <ArrowLeft size={20} /> Back to Home
           </Link>
-          <Button variant="default" onClick={handleDownload}>
-            <Download size={16} className="mr-2" />
-            Download PDF
-          </Button>
+          <PDFDownloadLink document={<ResumePDF />} fileName="Oyedamola_Moreira_Resume.pdf">
+            {({ loading }) =>
+              loading ? (
+                <Button className="bg-gray-500 text-white px-4 py-2 rounded">Loading...</Button>
+              ) : (
+                <Button className="bg-blue-600 text-white px-4 py-2 rounded inline-flex items-center gap-2">
+                  <Download size={16} /> Download PDF
+                </Button>
+              )
+            }
+          </PDFDownloadLink>
         </div>
 
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-2">Oyedamola Moreira</h1>
-          <p className="text-xl font-medium text-gray-700 mb-1">Full Stack Developer</p>
+        {/* Full HTML Resume Content (matches your previous Tailwind layout) */}
+        <header className="text-center mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">Oyedamola Moreira</h1>
+          <p className="text-lg md:text-xl font-medium text-gray-700 mb-1">Full Stack Software Engineer</p>
           <p className="text-gray-500">Lagos, Nigeria • aoyedamola@gmail.com</p>
-        </div>
+        </header>
 
-        {/* Professional Summary */}
-        <section className="mb-12">
-          <p className="text-gray-700 mb-2">
-            Results-driven Full Stack Engineer with expertise in building scalable web applications in e-commerce, EdTech, and AI-powered platforms. Proven track record delivering measurable business impact, enhancing user engagement, and driving revenue growth.
+        {/* Summary */}
+        <section className="mb-10">
+          <p className="text-gray-700 mb-3">
+            Results-driven Full Stack Software Engineer with a proven track record of designing and delivering scalable, high-impact web applications across e-commerce, EdTech, and AI-driven platforms.
           </p>
           <p className="text-gray-700">
-            Adept at translating complex technical challenges into elegant, user-focused solutions. Experienced in React.js, TypeScript, Next.js, Node.js, and integrating AI technologies to optimize workflows and deliver intelligent automation.
+            Specializes in React JavaScript, TypeScript, Next js and Node.js. Styles like Tailwind CSS and other modern styles, with deep expertise in modern backend architectures. Adept at optimizing performance, implementing clean and maintainable code, and translating complex technical requirements into user-centric solutions that drive measurable business results.
           </p>
         </section>
 
         {/* Skills */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
-            <Award size={24} /> Skills
+        <section className="mb-10">
+          <h2 className="text-xl md:text-2xl font-semibold flex items-center gap-2 mb-4">
+            <Award size={22} /> Technical Skills
           </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="p-6 border rounded-lg bg-gray-50">
-              <h3 className="font-medium mb-2">Frontend</h3>
-              <p>ReactJS, TypeScript, NextJS, Redux, Context API, Web Accessibility, Performance Optimization, Tailwind CSS, SCSS</p>
-            </div>
-            <div className="p-6 border rounded-lg bg-gray-50">
-              <h3 className="font-medium mb-2">Backend</h3>
-              <p>NodeJS, Express.js, PostgreSQL, MongoDB, Supabase, REST APIs</p>
-            </div>
-            <div className="p-6 border rounded-lg bg-gray-50">
-              <h3 className="font-medium mb-2">AI / Automation</h3>
-              <p>OpenAI API, Gemini 2.5 Pro, GPT Engineer Integration</p>
-            </div>
-            <div className="p-6 border rounded-lg bg-gray-50">
-              <h3 className="font-medium mb-2">Tools & Workflow</h3>
-              <p>Git, GitHub, ClickUp, Slack, VS Code, Postman, Vercel, Docker, Figma, Agile Methodologies</p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <SkillCard title="Frontend" content="React, TypeScript, Next.js, Redux, Context API, Web Accessibility, Performance Optimization, Tailwind CSS, SCSS" />
+            <SkillCard title="Backend" content="Node.js, Express.js, PostgreSQL, MongoDB, Supabase, RESTful APIs" />
+            <SkillCard title="AI & Automation" content="OpenAI API, Gemini, GPT Engineer, AI-driven workflow automation" />
+            <SkillCard title="Tools & Workflow" content="Git, GitHub, Docker, Postman, Vercel, Figma, Agile / Scrum" />
           </div>
         </section>
 
         {/* Experience */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold flex items-center gap-2 mb-6">
-            <Briefcase size={24} /> Experience
+        <section className="mb-10">
+          <h2 className="text-xl md:text-2xl font-semibold flex items-center gap-2 mb-5">
+            <Briefcase size={22} /> Professional Experience
           </h2>
-
-          {/* Bumpa */}
-          <div className="p-6 border rounded-lg bg-gray-50 mb-4">
-            <div className="flex justify-between mb-1">
-              <h3 className="font-semibold text-lg">Bumpa - Software Engineer</h3>
-              <span className="text-gray-500">Oct 2024 – Present</span>
-            </div>
-            <ul className="list-disc pl-5 text-gray-600">
-              <li>Drove ₦1 billion in monthly sales by delivering high-performance frontend features using React, TypeScript, and Redux.</li>
-              <li>Built and maintained Bumpa marketing website, improving SEO rankings and user acquisition.</li>
-              <li>Optimized merchant workflows by 40% with email campaigns, templates, and automation features.</li>
-              <li>Developed dashboards and real-time analytics for partner ecosystem management.</li>
-            </ul>
-          </div>
-
-          {/* Top Français Academy */}
-          <div className="p-6 border rounded-lg bg-gray-50 mb-4">
-            <div className="flex justify-between mb-1">
-              <h3 className="font-semibold text-lg">Top Français Academy - Full Stack Developer</h3>
-              <span className="text-gray-500">Jun 2025 – Present</span>
-            </div>
-            <ul className="list-disc pl-5 text-gray-600">
-              <li>Developed full-stack platform for online French learning using Node.js, React, PostgreSQL, Express.js.</li>
-              <li>Implemented course management, student progress tracking, and interactive features.</li>
-              <li>Ensured platform scalability and responsiveness across devices.</li>
-            </ul>
-          </div>
-
-          {/* Codelabs AI */}
-          <div className="p-6 border rounded-lg bg-gray-50 mb-4">
-            <div className="flex justify-between mb-1">
-              <h3 className="font-semibold text-lg">Codelabs AI - Backend Developer</h3>
-              <span className="text-gray-500">2025</span>
-            </div>
-            <ul className="list-disc pl-5 text-gray-600">
-              <li>Built AI-powered backend services integrating OpenAI API and Gemini 2.5 Pro for intelligent automation.</li>
-              <li>Implemented scalable APIs, enabling seamless integration with frontend and third-party services.</li>
-              <li>Optimized performance, logging, and monitoring for enterprise-grade reliability.</li>
-            </ul>
-          </div>
-
-          {/* Savans Pharmacy */}
-          <div className="p-6 border rounded-lg bg-gray-50 mb-4">
-            <div className="flex justify-between mb-1">
-              <h3 className="font-semibold text-lg">Savans Pharmacy - Full Stack Developer</h3>
-              <span className="text-gray-500">2025 – Ongoing</span>
-            </div>
-            <ul className="list-disc pl-5 text-gray-600">
-              <li>Developed a fully functional e-commerce platform for pharmacy products using React, Node.js, PostgreSQL, and Supabase.</li>
-              <li>Implemented real-time cart management, product catalog, and payment integration.</li>
-              <li>Focus on scalability, clean architecture, and optimized user experience.</li>
-            </ul>
-          </div>
+          <ExperienceItem title="Bumpa – Software Engineer" date="Oct 2024 – Present" items={[
+            "Contributed to ₦1B+ in monthly sales by delivering high-performance React and TypeScript features.",
+            "Built and maintained SEO-optimized marketing pages improving conversion rates.",
+            "Improved merchant workflows by over 40% using automation and reusable templates.",
+            "Developed dashboards and real-time analytics for internal and partner teams.",
+          ]}/>
+          <ExperienceItem title="Top Français Academy – Full Stack Developer" date="Jun 2025 – Present" items={[
+            "Built a full-stack e-learning platform for French language education.",
+            "Implemented course management, student progress tracking, and interactive features.",
+            "Ensured responsive design and scalable backend architecture.",
+          ]}/>
+          <ExperienceItem title="Codelabs AI – Backend Developer" date="2025" items={[
+            "Developed AI-powered backend services integrating OpenAI and Gemini.",
+            "Designed scalable APIs and automation pipelines.",
+            "Improved performance, logging, and system reliability.",
+          ]}/>
+          <ExperienceItem title="Savans Pharmacy – Full Stack Developer" date="2025 – Ongoing" items={[
+            "Developed a pharmacy e-commerce platform using React, Node.js, PostgreSQL, and Supabase.",
+            "Implemented cart management, checkout workflows, and payment integrations.",
+            "Focused on scalability, clean architecture, and user experience.",
+          ]}/>
         </section>
 
         {/* Education */}
-        <section>
-          <h2 className="text-2xl font-semibold flex items-center gap-2 mb-6">
-            <GraduationCap size={24} /> Education & Certifications
+        <section className="mb-10">
+          <h2 className="text-xl md:text-2xl font-semibold flex items-center gap-2 mb-5">
+            <GraduationCap size={22} /> Education
           </h2>
-          <div className="space-y-4">
-            <div className="p-6 border rounded-lg bg-gray-50">
-              <h3 className="font-semibold text-lg mb-1">B.Pharm – Bachelor of Pharmacy</h3>
-              <p className="font-medium text-gray-700 mb-1">Obafemi Awolowo University, Nigeria</p>
-              <p className="text-gray-600">Graduated 2018</p>
-            </div>
-            <div className="p-6 border rounded-lg bg-gray-50">
-              <h3 className="font-semibold text-lg mb-1">Web Development Training</h3>
-              <p className="font-medium text-gray-700 mb-1">Appclick</p>
-              <p className="text-gray-600">Full-stack development, modern web technologies, and best practices</p>
-            </div>
-          </div>
+          <EduCard title="Bachelor of Pharmacy (B.Pharm)" institution="Obafemi Awolowo University, Nigeria" note="Graduated 2018" />
+          <EduCard title="Web Development Training" institution="Appclick" note="Full-stack web development and modern engineering practices" />
         </section>
 
-        {/* Languages & Hobbies */}
-        <section className="mt-12">
-          <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
-            <Award size={24} /> Languages & Hobbies
+        {/* Languages & Interests */}
+        <section>
+          <h2 className="text-xl md:text-2xl font-semibold flex items-center gap-2 mb-4">
+            <Award size={22} /> Languages & Interests
           </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="p-6 border rounded-lg bg-gray-50">
-              <h3 className="font-medium mb-2">Languages</h3>
-              <p>English - Native</p>
-              <p>Yoruba fluent</p>
-              <p>Igbo</p>
-              <p>Some French</p>
-
-            </div>
-            <div className="p-6 border rounded-lg bg-gray-50">
-              <h3 className="font-medium mb-2">Hobbies</h3>
-              <p>Learning, Reading, Coding, Exploring new technologies</p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <SkillCard title="Languages" content="English (Native), Yoruba (Fluent), Igbo, French (Basic)" />
+            <SkillCard title="Hobbies" content="Coding, Reading, Singing, Dancing, Exploring new technologies" />
           </div>
         </section>
       </div>
+    </div>
+  );
+}
+
+/* Components */
+function SkillCard({ title, content }: { title: string; content: string }) {
+  return (
+    <div className="p-5 border rounded-lg bg-gray-50">
+      <h3 className="font-medium mb-2">{title}</h3>
+      <p>{content}</p>
+    </div>
+  );
+}
+function ExperienceItem({ title, date, items }: { title: string; date: string; items: string[] }) {
+  return (
+    <div className="p-5 border rounded-lg bg-gray-50 mb-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2 gap-1">
+        <h3 className="font-semibold">{title}</h3>
+        <span className="text-gray-500 text-sm">{date}</span>
+      </div>
+      <ul className="list-disc pl-5 text-gray-600 space-y-1">
+        {items.map((item, idx) => (
+          <li key={idx}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+function EduCard({ title, institution, note }: { title: string; institution: string; note: string }) {
+  return (
+    <div className="p-5 border rounded-lg bg-gray-50 mb-4">
+      <h3 className="font-semibold">{title}</h3>
+      <p className="text-gray-700">{institution}</p>
+      <p className="text-gray-600">{note}</p>
     </div>
   );
 }
