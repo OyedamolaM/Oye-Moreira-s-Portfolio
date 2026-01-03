@@ -39,7 +39,7 @@ export function ContactSection() {
                 <div>
                   <p className="font-medium text-foreground">Email</p>
                   <a href="mailto:aoyedamola@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
-                    aoyedamola@gmail.com
+                    oyedamolamoreira@gmail.com
                   </a>
                 </div>
               </div>

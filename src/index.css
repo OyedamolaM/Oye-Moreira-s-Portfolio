@@ -2,100 +2,143 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+/* =========================================================
+   DESIGN SYSTEM — BLUE DOMINANT
+   ========================================================= */
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 220 20% 10%;
+    /* ---------- Core ---------- */
+    --background: 220 60% 99%;
+    --foreground: 222 40% 10%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
+    /* ---------- Surfaces ---------- */
+    --surface: 0 0% 100%;
+    --surface-foreground: 222 40% 12%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 10%;
+    --surface-alt: 221 100% 97%;
 
-    --primary: 172 50% 40%;
+    /* ---------- Brand (REAL BLUE) ---------- */
+    --primary: 222 100% 55%;
+    --primary-hover: 222 100% 48%;
+    --primary-soft: 222 100% 92%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 15% 92%;
-    --secondary-foreground: 220 20% 20%;
+    /* ---------- Secondary ---------- */
+    --secondary: 220 20% 90%;
+    --secondary-foreground: 222 40% 16%;
 
-    --muted: 210 15% 95%;
-    --muted-foreground: 220 10% 45%;
-
-    --accent: 172 50% 40%;
+    /* ---------- Accent ---------- */
+    --accent: 200 100% 50%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* ---------- Muted ---------- */
+    --muted: 220 20% 94%;
+    --muted-foreground: 222 15% 45%;
 
-    --border: 210 15% 90%;
-    --input: 210 15% 90%;
-    --ring: 172 50% 40%;
+    /* ---------- Feedback ---------- */
+    --destructive: 0 85% 58%;
+    --destructive-foreground: 0 0% 100%;
 
-    --radius: 0.75rem;
+    /* ---------- Borders ---------- */
+    --border: 222 30% 85%;
+    --input: 222 30% 85%;
+    --ring: 222 100% 55%;
 
-    /* Custom tokens */
-    --font-heading: 'Playfair Display', serif;
-    --font-body: 'DM Sans', sans-serif;
-    
-    --gradient-hero: linear-gradient(135deg, hsl(172 50% 40% / 0.1), hsl(210 20% 98%));
-    --shadow-card: 0 4px 20px -4px hsl(220 20% 10% / 0.08);
-    --shadow-card-hover: 0 12px 40px -8px hsl(220 20% 10% / 0.15);
+    /* ---------- Radius ---------- */
+    --radius: 14px;
+
+    /* ---------- Effects ---------- */
+    --shadow-sm: 0 6px 16px hsl(222 40% 10% / 0.06);
+    --shadow-md: 0 14px 40px hsl(222 40% 10% / 0.12);
+    --shadow-lg: 0 30px 80px hsl(222 40% 10% / 0.18);
+
+    --hero-gradient: linear-gradient(
+      135deg,
+      hsl(222 100% 55% / 0.18),
+      hsl(200 100% 50% / 0.08)
+    );
   }
 
+  /* =========================================================
+     DARK MODE — DEEP BLUE
+     ========================================================= */
   .dark {
-    --background: 220 20% 8%;
-    --foreground: 210 20% 95%;
+    --background: 222 50% 6%;
+    --foreground: 220 30% 96%;
 
-    --card: 220 18% 12%;
-    --card-foreground: 210 20% 95%;
+    --surface: 222 45% 10%;
+    --surface-foreground: 220 30% 96%;
 
-    --popover: 220 18% 12%;
-    --popover-foreground: 210 20% 95%;
+    --surface-alt: 222 50% 14%;
 
-    --primary: 172 50% 50%;
-    --primary-foreground: 220 20% 8%;
+    --primary: 222 100% 62%;
+    --primary-hover: 222 100% 68%;
+    --primary-soft: 222 100% 18%;
+    --primary-foreground: 222 50% 6%;
 
-    --secondary: 220 15% 18%;
-    --secondary-foreground: 210 20% 90%;
+    --secondary: 222 30% 18%;
+    --secondary-foreground: 220 30% 92%;
 
-    --muted: 220 15% 15%;
-    --muted-foreground: 210 10% 55%;
+    --muted: 222 30% 14%;
+    --muted-foreground: 220 15% 60%;
 
-    --accent: 172 50% 50%;
-    --accent-foreground: 220 20% 8%;
+    --border: 222 30% 22%;
+    --input: 222 30% 22%;
+    --ring: 222 100% 62%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --shadow-sm: 0 6px 20px hsl(0 0% 0% / 0.45);
+    --shadow-md: 0 20px 60px hsl(0 0% 0% / 0.6);
+    --shadow-lg: 0 40px 120px hsl(0 0% 0% / 0.75);
 
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
-    --ring: 172 50% 50%;
-
-    --gradient-hero: linear-gradient(135deg, hsl(172 50% 50% / 0.08), hsl(220 20% 8%));
-    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
-    --shadow-card-hover: 0 12px 40px -8px hsl(172 50% 50% / 0.2);
+    --hero-gradient: linear-gradient(
+      135deg,
+      hsl(222 100% 62% / 0.22),
+      hsl(200 100% 50% / 0.12)
+    );
   }
 }
 
+/* =========================================================
+   BASE STYLES
+   ========================================================= */
 @layer base {
   * {
     @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground font-body antialiased;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
+    @apply bg-background text-foreground font-sans antialiased;
   }
 }
 
+/* =========================================================
+   OPINIONATED UTILITIES (VISIBLE CHANGE)
+   ========================================================= */
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  .bg-hero {
+    background: var(--hero-gradient);
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground font-medium
+           rounded-xl px-6 py-3
+           shadow-md transition-all duration-300
+           hover:bg-primary-hover hover:shadow-lg;
+  }
+
+  .card {
+    @apply bg-surface rounded-2xl shadow-sm border border-border;
+  }
+
+  .card-glow {
+    box-shadow:
+      0 0 0 1px hsl(222 100% 55% / 0.08),
+      0 20px 60px hsl(222 100% 55% / 0.18);
+  }
+
+  .text-accent {
+    color: hsl(222 100% 55%);
   }
 }
